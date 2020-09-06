@@ -1,29 +1,32 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-  </div>
+  <router-view />
 </template>
 
 <script>
-
 export default {
   name: 'App',
 }
 </script>
 
 <style>
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
-}
-#app,
-html,
-body,
-input,
-button,
-select {
-  font-family: 'Montserrat', sans-serif;
-}
+  * {
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  #app,
+  html,
+  body,
+  input,
+  button,
+  select {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  body, html {
+    height: 100%;
+  }
+
 </style>
