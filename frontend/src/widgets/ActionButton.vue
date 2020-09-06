@@ -15,14 +15,14 @@ export default {
 
 <style scoped>
   .action__button {
-    width: 100%;
-    max-width: 130px;
+    width: 130px;
     height: 110px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin: 8px;
   }
 
   .action__button button {
