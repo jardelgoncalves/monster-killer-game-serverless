@@ -3,7 +3,7 @@
     <div class="root">
       <app-logo />
       <h1>Monster Killer</h1>
-      <app-raised-button text="Get Start"></app-raised-button>
+      <app-raised-button text="Start"></app-raised-button>
       <app-link text="Ranking" path="/ranking" class="view-link" />
     </div>
   </app-layout>
