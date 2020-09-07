@@ -1,3 +1,8 @@
 {
-  "body": "{\"name\": \"Jardel\", \"score\": 1000}"
+  "pathParameters": {
+    "userId": "46eb0111-74eb-4ad2-88ea-72bb03e41428"
+  },
+  "body": {
+    "score": 100
+  }
 }
