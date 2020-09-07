@@ -1,3 +1,3 @@
 module.exports = {
-  scoreCreate: require('./create')
+  createScore: require('./create')
 }

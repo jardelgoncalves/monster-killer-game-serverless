@@ -9,11 +9,11 @@ class Handler {
   constructor({ dynamoDbService }) {
     this.dynamoDbService = dynamoDbService;
     this.dynamoScoreTable = process.env.DYNAMO_SCORE_TABLE
+    this.dynamoUserTable = process.env.DYNAMO_USER_TABLE
   }
 
   static validator() {
     return Joi.object({
-      name: Joi.string().min(2).max(100).required(),
       score: Joi.number().required()
     })
   }
@@ -30,17 +30,37 @@ class Handler {
     return params
   }
 
+  async getUser(userId) {
+    const params = {
+      TableName: this.dynamoUserTable,
+      Key: {
+        id: userId
+      }
+    };
+  
+    return this.dynamoDbService.get(params).promise();
+  }
+
   async insert(data) {
     return this.dynamoDbService.put(data).promise();
   }
 
   async main(event) {
+    if (!event.pathParameters || !event.pathParameters.userId)
+      return response.error({ statusCode: 422 }, null, 'userId is required!')
+    
     try {
-      const data = event.body
-      const dbParams = this.prepareData(data)
-      await this.insert(dbParams)
 
-      return response.success(dbParams.Item)
+      const user = await this.getUser(event.pathParameters.userId);
+      if (!user || !user.Item || !user.Item.id) return response.error({ statusCode: 422 }, null, 'user not found!')
+
+
+      const data = event.body
+      const dbParams = this.prepareData({ ...data, userId: user.Item.id, username: user.Item.username })
+
+      await this.insert(dbParams)
+      
+      return response.success({ ...dbParams.Item })
     } catch (error) {
       console.error('Deu ruim**', error.stack)
       return response.error({ statusCode: 500 })
