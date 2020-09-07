@@ -1,3 +1,3 @@
 module.exports = {
-  rankingHandler: require('./handler')
+  rankingHandlerEvent: require('./handler')
 }
