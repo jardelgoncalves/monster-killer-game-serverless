@@ -3,7 +3,7 @@
     <div class="row score">
       <app-panel class="score__panel">
         <app-icon icon="coin"  />
-        <span>34</span>
+        <span>{{coin()}}</span>
       </app-panel>
     </div>
     <div class="row players">
@@ -67,6 +67,7 @@
   import ActionButton from '@/widgets/ActionButton.vue';
   import RaisedButton from '@/widgets/RaisedButton.vue';
   import Icon from '@/templates/Icon.vue';
+  import humanNumber from 'human-number';
 
   export default {
     data() {
@@ -78,6 +79,11 @@
           { text: 'You hit the monster with 12 damage', cls: 'player' },
           { text: 'The Monster hit you with 11 damage', cls: 'monster' },
         ]
+      }
+    },
+    methods: {
+      coin() {
+        return humanNumber(1100)
       }
     },
     computed: {
