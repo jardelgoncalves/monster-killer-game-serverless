@@ -10,10 +10,10 @@ module.exports = {
       headers
     }
   },
-  error(data, status = 501) {
+  error(data, status = 501, message) {
     return {
       statusCode: data.statusCode || status,
-      body: 'Couldn\'t create item',
+      body: message || 'Couldn\'t create item',
       headers: {
         ...headers,
         'Content-Type': 'text/plain'
