@@ -3,7 +3,7 @@
     <div class="root">
       <app-logo />
       <h1>Monster Killer</h1>
-      <app-raised-button text="Start"></app-raised-button>
+      <app-raised-button :click="fetchUserLocalstorege" text="Start"></app-raised-button>
       <app-link text="Ranking" path="/ranking" class="view-link" />
     </div>
   </app-layout>
@@ -15,12 +15,23 @@
   import Layout from '@/templates/Layout.vue';
   import Logo from '@/components/Logo.vue';
 
+  import constant from '../utils/constant';
+
   export default {
     components: {
       'app-layout': Layout,
       'app-link': Link,
       'app-raised-button': RaisedButton,
       'app-logo': Logo,
+    },
+    methods: {
+      fetchUserLocalstorege() {
+        if (localStorage.getItem(constant.TOKEN)) {
+          this.$router.push('/game')
+          return;
+        }
+        this.$router.push('/start') 
+      }
     }
   }
 </script>
