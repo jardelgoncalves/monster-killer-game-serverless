@@ -6,7 +6,7 @@ class Handler {
     this.dynamoRankingTable = process.env.DYNAMO_RANKING_TABLE
   }
 
-  async main() {
+  async main(event) {
     try {
       const data = await this.dynamoDbService.scan({
         TableName: this.dynamoRankingTable,
@@ -16,7 +16,7 @@ class Handler {
       return response.success(data.Items, 200)
     } catch (error) {
       console.error('Deu ruim**', error.stack)
-      return response.error({ statusCode: 500 })
+      return response.error({ statusCode: 500 }, null, 'Internal error')
     }
   }
 }
