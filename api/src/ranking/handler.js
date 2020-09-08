@@ -13,6 +13,7 @@ class Handler {
     return Records.map(({ dynamodb }) => this.prepareData({
       userId: dynamodb.NewImage.userId.S,
       username: dynamodb.NewImage.username.S,
+      scoreId: dynamodb.NewImage.id.S,
       score: dynamodb.NewImage.score.N,
     }))
   }
