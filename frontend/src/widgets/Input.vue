@@ -1,10 +1,21 @@
 <template>
-  <input class="input" :placeholder="placeholder" />
+  <input
+    class="input"
+    :name="name"
+    :value="value"
+    :placeholder="placeholder"
+    @change="change"
+  />
 </template>
 
 <script>
 export default {
-  props: ['placeholder']
+  props: {
+    placeholder: { type: String },
+    change: { type: Function },
+    value: { type: String },
+    name: { type: String },
+  }
 }
 </script>
 

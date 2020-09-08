@@ -1,12 +1,15 @@
 <template>
-  <button class="raised__button">
+  <button class="raised__button" @click="click">
     {{ text }}
   </button>
 </template>
 
 <script>
 export default {
-  props: ['text']
+  props: {
+    text: { type: String },
+    click: { type: Function },
+  }
 }
 </script>
 
