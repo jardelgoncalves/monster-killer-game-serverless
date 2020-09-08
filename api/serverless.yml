@@ -14,6 +14,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
         - dynamodb:PutItem
+        - dynamodb:Scan
         - dynamodb:ListStreams
         - dynamodb:DescribeStream
       Resource: "arn:aws:dynamodb:${self:provider.region}:*"
