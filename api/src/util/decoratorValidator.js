@@ -1,6 +1,6 @@
 const decoratorValidator = (fn, schema, argType) => {
   return async function(event) {
-    const data = event[argType];
+    const data = JSON.parse(event[argType]);
     const { error, value } = schema.validate(data, { abortEarly: true });
 
 
