@@ -1,3 +1,4 @@
 module.exports = {
-  rankingHandlerEvent: require('./handler')
+  rankingHandlerEvent: require('./handler'),
+  rankingGetAll: require('./getAll')
 }
