@@ -1,0 +1,40 @@
+{
+  "Records": [
+    {
+      "eventID": "98eaa64cc70750d6c30855fd0acff5ae",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1599462130,
+        "Keys": {
+          "id": {
+            "S": "6dd889cd-51b3-483e-83d7-20d4aea69e2d"
+          }
+        },
+        "NewImage": {
+          "createdAt": {
+            "S": "2020-09-07T07:02:10.610Z"
+          },
+          "score": {
+            "N": "1000"
+          },
+          "username": {
+            "S": "Jardel"
+          },
+          "userId": {
+            "S": "46eb0111-74eb-4ad2-88ea-72bb03e41428"
+          },
+          "id": {
+            "S": "6dd889cd-51b3-483e-83d7-20d4aea69e2d"
+          }
+        },
+        "SequenceNumber": "178000000000027511885102",
+        "SizeBytes": 126,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:214089056630:table/scores/stream/2020-09-07T06:50:44.971"
+    }
+  ]
+}
