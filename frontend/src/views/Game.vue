@@ -8,14 +8,14 @@
     </div>
     <div class="row players">
       <app-panel>
-        <h1>Jogador</h1>
-        <app-life-bar :life="100" />
-        <div class="players__life">90%</div>
+        <h1>{{ username }}</h1>
+        <app-life-bar :life="playerLife" />
+        <div class="players__life">{{ playerLife }}%</div>
       </app-panel>
       <app-panel>
         <h1>Monster</h1>
-        <app-life-bar :life="19"/>
-        <div class="players__life">19%</div>
+        <app-life-bar :life="monsterLife"/>
+        <div class="players__life">{{ monsterLife }}%</div>
       </app-panel>
     </div>
     <div
@@ -32,26 +32,26 @@
       <app-panel>
         <div class="action">
           <template v-if="running">
-            <app-action-button text="Attack">
+            <app-action-button :click="() => attack()" text="Attack">
               <app-icon icon="attack"  />
             </app-action-button>
-            <app-action-button text="Special Attack" :specialAttack="true">
+            <app-action-button :click="() => attack(true)" text="Special Attack" :specialAttack="true">
               <app-icon icon="special"  />
             </app-action-button>
-            <app-action-button text="Heal" :heal="true">
+            <app-action-button :click="healAndHurt" text="Heal" :heal="true">
               <app-icon icon="potion" />
             </app-action-button>
-            <app-action-button text="Leave" :leave="true">
+            <app-action-button :click="() => running = false" text="Leave" :leave="true">
               <app-icon icon="door"  />
             </app-action-button>
           </template>
           <template v-else>
-            <app-raised-button text="Start" />
+            <app-raised-button :click="startGame" text="Start" />
           </template>
         </div>
       </app-panel>
     </div>
-    <div class="row">
+    <div class="row" v-if="logs.length">
       <app-panel>
         <app-log :logs="logs" />
       </app-panel>
@@ -60,30 +60,81 @@
 </template>
 
 <script>
-  // import RaisedButton from '@/widgets/RaisedButton.vue';
-  import Panel from '@/components/Panel.vue';
+  import humanNumber from 'human-number';
+  
   import LifeBar from '@/components/LifeBar.vue';
+  import Panel from '@/components/Panel.vue';
   import Log from '@/components/Log.vue';
   import ActionButton from '@/widgets/ActionButton.vue';
   import RaisedButton from '@/widgets/RaisedButton.vue';
   import Icon from '@/templates/Icon.vue';
-  import humanNumber from 'human-number';
+
+  import api from '../services/api'
+  import constant from '../utils/constant'
+  import { random } from '../utils/random'
+  import { abs } from '../utils/limit'
 
   export default {
     data() {
       return {
-        running: true,
-        monsterLife: 0,
+        username: 'Player',
+        user: null,
+        running: false,
+        monsterLife: 100,
         playerLife: 100,
-        logs: [
-          { text: 'You hit the monster with 12 damage', cls: 'player' },
-          { text: 'The Monster hit you with 11 damage', cls: 'monster' },
-        ]
+        logs: [],
+        coins: 0,
       }
     },
     methods: {
       coin() {
-        return humanNumber(1100)
+        return humanNumber(this.coins)
+      },
+      startGame() {
+        this.running = true;
+        this.playerLife = 100
+        this.monsterLife = 100
+        this.logs = [],
+        this.coins = 0
+      },
+      attack(special) {
+        this.hurt('monsterLife', 5, 10, special, 'player')
+      
+        this.calculateCoins('i', random(5, 10), special)
+        if (!this.monsterLife) return;
+        this.hurt('playerLife', 8, 12, false, 'monster')
+      },
+      hurt(prop, min, max, special = false, cls) {
+        const plusAttack = special ? 4 : 0;
+
+        const _hurt = random(min + plusAttack, max + plusAttack);
+
+        this[prop] = abs(this[prop] - _hurt, 0, 'max')
+        if (cls === 'monster') {
+          this.registerLog(`The Monster hit ${this.username} with ${_hurt} damage`, cls);
+          return
+        }
+        this.registerLog(`${this.username} hit the monster with ${_hurt} damage`, cls);
+      },
+      healAndHurt() {
+        this.heal(10, 15)
+        this.calculateCoins('d', random(7, 12));
+        this.hurt('playerLife', 7, 12, false, 'monster');
+      },
+      heal(min, max) {
+        const heal = random(min, max);
+        this.playerLife = abs(this.playerLife + heal, 100, 'min');
+        this.registerLog(`${this.username} healed ${heal} of his life`, 'heal')
+      },
+      registerLog(text, cls) {
+        this.logs.unshift({ text, cls });
+      },
+      calculateCoins(type = 'i', base = 10, special) {
+        base = special ? base - 5: base
+
+        this.coins =  type === 'i'
+          ? this.coins += base * 250
+          : abs(this.coins - (base * 100), 0, 'max')
       }
     },
     computed: {
@@ -92,18 +143,44 @@
       }
     },
     watch: {
-      hasResult(value) {
-        if (value) this.running = false
+      async hasResult(value) {
+        if (value) {
+          this.running = false
+
+          if (!this.user || !this.user.id) {
+            this.$router.push('/')
+            return;
+          }
+
+          try {
+            await api.post(`score/${this.user.id}`, {
+              score: this.coins
+            });
+          } catch (error) {
+            console.log(error)
+          }
+        }
       }
     },
     components: {
-      // 'app-raised-button': RaisedButton,
       'app-panel': Panel,
       'app-life-bar': LifeBar,
       'app-action-button': ActionButton,
       'app-raised-button': RaisedButton,
       'app-icon': Icon,
       'app-log': Log,
+    },
+    beforeMount() {
+      if (!localStorage.getItem(constant.TOKEN)) {
+        this.$router.push('/')
+        return;
+      }
+
+      const user = JSON.parse(localStorage.getItem(constant.TOKEN));
+      if (user && user.username) {
+        this.user = user
+        this.username = user.username;
+      }
     }
   }
 </script>
