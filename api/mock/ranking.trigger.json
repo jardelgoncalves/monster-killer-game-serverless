@@ -18,16 +18,19 @@
             "S": "2020-09-07T07:02:10.610Z"
           },
           "score": {
-            "N": "1000"
+            "N": "9440"
           },
           "username": {
-            "S": "Jardel"
+            "S": "Jardel Gonçalves"
           },
           "userId": {
-            "S": "46eb0111-74eb-4ad2-88ea-72bb03e41428"
+            "S": "cdbc15d6-848e-4103-8540-4dfe34695d8e"
+          },
+          "scoreId": {
+            "S": "5183d0c7-3f9c-4a00-8da4-c7875f70feeb"
           },
           "id": {
-            "S": "6dd889cd-51b3-483e-83d7-20d4aea69e2d"
+            "S": "e0e3c4a4-2bc0-4f8d-a0f9-5b798585ab2e"
           }
         },
         "SequenceNumber": "178000000000027511885102",
