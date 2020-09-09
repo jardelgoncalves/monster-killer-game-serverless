@@ -10,7 +10,7 @@ class Handler {
   treatRecords({ Records }) {
     if(!Records || !Array.isArray(Records)) return [];
 
-    return Records.map(({ dynamodb }) => this.prepareData({
+    return Records.map(({ dynamodb }) => ({
       userId: dynamodb.NewImage.userId.S,
       username: dynamodb.NewImage.username.S,
       scoreId: dynamodb.NewImage.id.S,
@@ -29,10 +29,33 @@ class Handler {
     }
     return params
   }
-
   
   async insert(data) {
     return this.dynamoDbService.put(data).promise();
+  }
+
+  async find(data) {
+    const params = {
+      TableName: this.dynamoRankingTable,
+      KeyConditionExpression: "userId = :userId",
+      ExpressionAttributeValues: {
+        ':userId': data.userId || null
+      }
+    }
+    return this.dynamoDbService.query(params).promise();
+  }
+
+  async createOrUpdate(data) {
+    if (!data) return null;
+
+    const record = await this.find(data);
+    const exists = record.Items.filter(
+      r => r.userId === data.userId && Number(r.score) < Number(data.score)
+    )
+    if (record.Items.length && !exists.length ) return;
+    
+    const dbParam =  this.prepareData(data)
+    return this.insert(dbParam)
   }
 
   async main(event) {
@@ -40,7 +63,7 @@ class Handler {
       const data = this.treatRecords(event)
 
       await Promise.all(
-        data.map(d => this.insert(d))
+        data.map(d => this.createOrUpdate(d))
       )
       
       return response.success({ success: true })
