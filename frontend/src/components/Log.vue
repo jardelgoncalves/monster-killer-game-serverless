@@ -1,6 +1,6 @@
 <template>
   <ul class="logs" v-if="logs.length">
-    <li v-for="item in logs" :key="item.text" :class="item.cls">{{ item.text }}</li>
+    <li v-for="(item, i) in logs" :key="item.text + i" :class="item.cls">{{ item.text }}</li>
   </ul>
 </template>
 
@@ -42,5 +42,9 @@ li.player {
 
 li.monster {
   background: rgba(85, 173, 254, 0.66);
+}
+li.heal {
+  background: rgb(238, 139, 161, 0.66);
+
 }
 </style>
