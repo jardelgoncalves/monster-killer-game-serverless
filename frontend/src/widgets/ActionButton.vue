@@ -1,6 +1,9 @@
 <template>
-  <div class="action__button" :class="{'special-attack': specialAttack, heal, leave }">
-    <button>
+  <div
+    class="action__button"
+    :class="{'special-attack': specialAttack, heal, leave }"
+  >
+    <button @click="click">
       <slot></slot>
     </button>
     <span>{{ text }}</span>
@@ -9,7 +12,13 @@
 
 <script>
 export default {
-  props: ['text', 'specialAttack', 'heal', 'leave']
+  props: {
+    text: { type: String },
+    specialAttack: { type: Boolean },
+    heal: { type: Boolean },
+    leave: { type: Boolean },
+    click: { type: Function },
+  }
 }
 </script>
 
