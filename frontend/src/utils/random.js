@@ -1,0 +1,1 @@
+export const random = (min = 1, max = 10) => Math.round(Math.random() * (max - min) + min)
