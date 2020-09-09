@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router'
 import ViewRoot from './views/ViewRoot.vue';
 import StartGame from './views/StartGame.vue';
+import Ranking from './views/Ranking.vue';
 import Game from './views/Game.vue';
 
 Vue.use(VueRouter)
@@ -13,5 +14,7 @@ export default new VueRouter({
     path: '/start', component: StartGame
   }, {
     path: '/game', component: Game
+  }, {
+    path: '/ranking', component: Ranking
   }]
 })
