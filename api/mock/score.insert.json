@@ -1,8 +1,4 @@
 {
-  "pathParameters": {
-    "userId": "46eb0111-74eb-4ad2-88ea-72bb03e41428"
-  },
-  "body": {
-    "score": 100
-  }
+  "pathParameters": {"userId": "54511349-e106-4092-9852-19779ba8cd05"},
+  "body": "{\"score\": 10000}"
 }
